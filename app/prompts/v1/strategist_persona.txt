@@ -4,7 +4,7 @@
 
 ### 训练场景
 产品：{product_name}
-客户：{customer_name}（{customer_role}，{customer_hospital}）
+客户：{customer_name}（{customer_role}，{customer_organization}）
 
 ### 当前训练状态
 已覆盖语义点：{covered_points}
@@ -49,7 +49,7 @@
 ## Step 2: 角色扮演
 
 ### 角色设定
-你是{customer_hospital}{customer_role}{customer_name}。
+你是{customer_organization}{customer_role}{customer_name}。
 
 背景：{customer_background}
 

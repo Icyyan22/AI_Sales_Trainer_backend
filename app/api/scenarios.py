@@ -18,7 +18,7 @@ class CreateScenarioRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=100)
     customer_name: str = Field(..., min_length=1)
     customer_role: str = Field(..., min_length=1)
-    customer_hospital: str = ""
+    customer_organization: str = ""
     customer_background: str = ""
     customer_concerns: list[str] = []
     customer_speaking_style: str = ""
@@ -69,7 +69,7 @@ async def create_scenario(req: CreateScenarioRequest, _: UserRecord = Depends(re
         "customer_profile": {
             "name": req.customer_name,
             "role": req.customer_role,
-            "hospital": req.customer_hospital,
+            "organization": req.customer_organization,
             "background": req.customer_background,
             "concerns": req.customer_concerns,
             "speaking_style": req.customer_speaking_style,

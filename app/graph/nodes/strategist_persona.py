@@ -120,7 +120,7 @@ def build_persona_prompt(
         product_name=scenario.product.name,
         customer_name=cp.name,
         customer_role=cp.role,
-        customer_hospital=cp.hospital,
+        customer_organization=cp.organization,
         customer_background=cp.background,
         customer_speaking_style=cp.speaking_style,
         customer_concerns=concerns_text,

@@ -18,7 +18,7 @@ class SemanticPoint(BaseModel):
 class CustomerProfile(BaseModel):
     name: str
     role: str
-    hospital: str
+    organization: str
     background: str
     concerns: list[str] = []
     speaking_style: str = ""
