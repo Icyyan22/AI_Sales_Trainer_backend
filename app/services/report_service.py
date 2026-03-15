@@ -2,9 +2,14 @@ from __future__ import annotations
 
 import json
 
+import datetime
+
+from sqlalchemy import select
+
 from app.config import settings
 from app.graph.builder import get_graph
 from app.llm.structured_output import structured_llm_call
+from app.models.db import SessionRecord, async_session_factory
 from app.models.scenario import load_scenario
 from app.prompts.registry import get_prompt
 from app.services import session_service
@@ -149,7 +154,7 @@ async def generate_report(session_id: str) -> dict | None:
         },
     )
 
-    return {
+    report = {
         "session_id": session_id,
         "summary": {
             "total_turns": turn_count,
@@ -161,6 +166,23 @@ async def generate_report(session_id: str) -> dict | None:
         "skill_radar": skill_radar,
         "feedback": feedback,
     }
+
+    # Persist report to DB so Dashboard can read it
+    async with async_session_factory() as db:
+        result = await db.execute(
+            select(SessionRecord).where(SessionRecord.id == session_id)
+        )
+        session = result.scalar_one_or_none()
+        if session:
+            session.final_report = report
+            if not session.final_coverage:
+                session.final_coverage = coverage
+            if session.status != "completed":
+                session.status = "completed"
+                session.completed_at = datetime.datetime.now(datetime.UTC)
+            await db.commit()
+
+    return report
 
 
 def _compute_skill_radar_from_messages(messages: list[dict]) -> dict:
